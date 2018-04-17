@@ -149,7 +149,7 @@ shinyApp(
     
     if(input$distribution == 1){
       isolate(
-        vals$ar <- simulation(vals$ar, participants, referents, zipf, B, percent.agreement)
+        vals$ar <- simulation(vals$ar, participants, referents, zipf, B, percent.agreement.raw.noinference)
       )
       isolate(
         vals$kappa <- simulation(vals$kappa, participants, referents, zipf, B, fleiss.kappa.raw.noinference)
@@ -157,7 +157,7 @@ shinyApp(
     } 
     else{
       isolate(
-        vals$ar <- simulation(vals$ar, participants, referents, normal, sd, percent.agreement)
+        vals$ar <- simulation(vals$ar, participants, referents, normal, sd,  percent.agreement.raw.noinference)
       )
       
       isolate(

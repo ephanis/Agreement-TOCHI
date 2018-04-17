@@ -8,7 +8,7 @@
 #
 #
 
-# Simplified by Pierre Dragicevic and Theophanis Tsandilas
+# Note: Initial code by Kilem L. Gwet. Adapted by Pierre Dragicevic and Theophanis Tsandilas
 
 
 # ==============================================================

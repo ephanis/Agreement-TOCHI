@@ -10,7 +10,7 @@
 rm(list=ls()) # Clean up R's memory
 
 library("zipfR") # Check http://www.r-bloggers.com/the-zipf-and-zipf-mandelbrot-distributions/
-source("agreement.CI.R")
+#source("agreement.CI.R")
 source("agreement.coefficients.R")
 
 
