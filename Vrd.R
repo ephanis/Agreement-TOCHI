@@ -10,7 +10,7 @@
 
 
 #rm(list=ls()) # Clean up R's memory
-library("coin")
+#library("coin")
 
 # data is a matrix containing the signs proposed for each referent (columns) by each participant (rows)
 # return a binary matrix with agreement values (1 = agreement, 0 = disagreement) for all the pairs of participants (rows) for each referent (columns)
