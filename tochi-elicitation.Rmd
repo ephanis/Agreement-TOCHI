@@ -136,6 +136,14 @@ shinyApp(
    })
     
   output$simPlot <- renderPlot({
+      if(isolate(vals$counter == steps)){
+        isolate({
+          vals$ar <- c()
+          vals$kappa <- c()
+          vals$counter <- 0
+        })
+      }
+    
       if(input$bias == 1){
         B <- .646
         sd <- 2.58
@@ -249,9 +257,17 @@ shinyApp(
     L <- 9 # I calculate errors for AR = .1, .2, ..., .9
     
     # Initiate the reactive values here...
-    vals <- reactiveValues(counter = 0, counter_ = 0, errors.vrd = rep(0, L), errors.vb = rep(0, L))
+    vals <- reactiveValues(counter = 0, errors.vrd = rep(0, L))
     
     output$vrdPlot <- renderPlot({
+      if(isolate(vals$counter == steps)){
+        isolate({
+          vals$ar <- c()
+          vals$kappa <- c()
+          vals$counter <- 0
+        })
+      }
+      
       if(input$alpha == 1) alpha <- .05
       else alpha <- .01
       
@@ -281,37 +297,6 @@ shinyApp(
       }
     })
   
-    
-    output$vrdPlot <- renderPlot({
-      if(input$alpha == 1) alpha <- .05
-      else alpha <- .01
-      
-      if(input$participants == 1){
-        participants = 10
-      } else if(input$participants == 2){
-        participants = 20
-      } else {
-        participants = 30
-      }
-      
-     isolate(
-        vals$errors.vrd <- typeI.simulation(vals$errors.vrd, population.zipf, participants, betas, alpha)
-      )
-      
-      isolate({ vals$counter <- vals$counter + 1})
-      err <- isolate(vals$errors.vrd) / isolate(vals$counter)
-      
-      plot.error(err, ar.levels, alpha)
-      title(xlab="Population AR", ylab="Type I Error Rate (%)")
-      
-      text <- paste0("Completed: ", isolate(vals$counter), " out of ", steps, " iterations")
-      mtext(text, side=3)
-      
-      if(isolate(vals$counter) < steps){
-        invalidateLater(200, session)
-      }
-    })
-    
     output$caption <- renderUI({
       if(input$participants > 0){
         if(input$alpha == 1 || input$alpha == 2){
