@@ -27,8 +27,8 @@ As alternatives, we present agreement indices that are routinely used in inter-r
 ##Materials
 The article will appear at the <i>ACM Transanctions on Computer-Human Interaction (TOCHI)</i>, but you can download a [[PDF; 2.9MB]](https://www.lri.fr/~fanis/docs/gelicitation.pdf) preprint, author version of the article (50 pages).
 
-Results from additional experiments can be downloaded as suplementary material [[PDF; 128KB]](tochi-supplementary.pdf).
-You can also download the R code [[ZIP; 112KB]](R Code.zip) that I used for the analyses reported in the paper.
+Results from additional experiments can be downloaded as suplementary material [[PDF; 128KB]](https://www.lri.fr/~fanis/agreement/tochi-supplementary.pdf).
+You can also check the [R code](https://github.com/ephanis/TOCHI-supplementary) that I used for the analyses reported in the paper.
 
 The article was partly based on a research report that I co-authored with Pierre Dragicevic back in September 2015:
 
@@ -36,16 +36,13 @@ The article was partly based on a research report that I co-authored with Pierre
 Theophanis Tsandilas and Pierre Dragicevic. [Accounting for Chance Agreement in Gesture Elicitation Studies](https://hal.archives-ouvertes.fr/hal-01267288/document). *Research Report 1584, LRI - CNRS, University Paris-Sud*, Feb 2016, 5 pages.
 </blockquote>
 
-**Note:** Pierre's contribution to this work has been significant and includes writing, developing R code, and engaging in long discussions. I encourage the readers to check his page on [statistical communication for HCI](http://www.aviz.fr/badstats). 
+**Special Acknowledgment:** Pierre's contribution to this work has been significant and includes writing, developing R code, and engaging in long discussions. I encourage the readers to check his page on [statistical communication for HCI](http://www.aviz.fr/badstats). 
 
 This year, I opened an introductory [course on statistical methods](https://www.lri.fr/~fanis/courses/Stats2017/), which gave particular emphasis on how to test the assumptions of statistical procedures with simple Monte Carlo simulations. Many of the results that I report in the TOCHI article to evaluate the statistics are based on such simple simulations. The course's material is still preliminary, but I hope to drastically improve it in the folllowing academic years. 
 
-##A Critical Stance on a Controversial Topic
-The article questions data-analysis methods that can be considered as mainstream in gesture-elicitation research. The agreement index *A* introduced by @Wobbrock:2005 has been used for the analysis of dozens, or maybe hundreds, of gesture elicitations studies in the past. However, the article shows that it can mislead researchers about how participants agree on their gesture assignments. In addition, the article identifies severe flaws in two papers recently published at CHI [@Vatavu:2015;@Vatavu:2016], where the first was awarded an honorable mention. My article's recommendation is that the significance tests, software, and agreement-interpretation guidelines introduced by this work should be abandoned. 
+<!-- A primary source of these problems is that work on gesture elicitation has overlooked decades of very related research in other domains. Such research has introduced a range of alternative measures to quantify agreement and has also investigated methods to support statistical inference. The most well-known agreement measure is Cohen's Kappa, but there are several others that cover different cases or make different probabilistic assumptions. The book of @gwet2014 on statistics for inter-rater reliability studies proved to be an excellent starting point for me.  -->
 
-A primary source of these problems is that work on gesture elicitation has overlooked decades of very related research in other domains. Such research has introduced a range of alternative measures to quantify agreement and has also investigated methods to support statistical inference. The most well-known agreement measure is Cohen's Kappa, but there are several others that cover different cases or make different probabilistic assumptions. The book of @gwet2014 on statistics for inter-rater reliability studies proved to be an excellent starting point for me. 
-
-The relationship between a gesture-elicitation and a inter-rater reliability study may not look evident at first, but it can be easily understood by describing gesture elicitation as follows. Instead of asking a single person, e.g., a designer, to choose gestures for the commands of a new interactive system, the task is assigned to multiple independent people sampled from a target user population. The level of agreement among these people characterizes how subjective or *reliable* an assignment of gestures to commands is. Low agreement signifies that a common vocabulary cannot reliably represent the choices of a user population.
+<!-- The relationship between a gesture-elicitation and a inter-rater reliability study may not look evident at first, but it can be easily understood by describing gesture elicitation as follows. Instead of asking a single person, e.g., a designer, to choose gestures for the commands of a new interactive system, the task is assigned to multiple independent people sampled from a target user population. The level of agreement among these people characterizes how subjective or *reliable* an assignment of gestures to commands is. Low agreement signifies that a common vocabulary cannot reliably represent the choices of a user population. -->
 
 ##Basic Terminology
 @Wobbrock:2009 summarize a <emph>gesture elicitation study</emph> as follows: 
@@ -54,12 +51,12 @@ The relationship between a gesture-elicitation and a inter-rater reliability stu
 *Participants are prompted with <emph>referents</emph>, or the effects of actions, and perform <emph>signs</emph> that cause those actions.*
 </blockquote>
 
-In my analysis, I distinguish between the physical gestures performed by participants and their signs. A sign can be thought of as the interpretation of an observed gesture, or otherwise, as a category that groups together ”equal” or ”similar” gestures. The classification observed gestures into signs is usually performed by humans.
+In our analysis, we distinguish between the physical gestures performed by participants and their signs. A sign can be thought of as the interpretation of an observed gesture, or otherwise, as a category that groups together ”equal” or ”similar” gestures. The classification observed gestures into signs is usually performed by humans.
 
 If a sign occurs more than once for a referent, we infer that at least two participants <emph>agree</emph> on this sign. Researchers usually seek signs that enjoy wide agreement among users.
 
 ##Major Issues
-I try here to illustrate some of the isses raised by the article. 
+To quantify agreement, a great number of elicitation studies have used the *A* index of @Wobbrock:2005. This index has been recently replaced by a more accurate measure, the agreement rate *AR* [@Findlater:2012;@Vatavu:2015]. @Vatavu:2015 argued for the adoption of the new index and provided guidelines on how to interpret agreement rates by suggesting ranges of low, medium, high, and very high agreement. Furthermore, they proposed the *Vrd* statistic for comparing agreement rates within participants. More recently, @Vatavu:2016 introduced the *Vb* statistic for comparing agreement rates between independent groups of participants. While statistics for analyzing agreement are important for gesture elicitation research, our article identifies serious problems in the above methods.
 
 ###The Problem of Chance Agreement
 The notion of <emph>chance agreement</emph> has a central role in the formulation of most agreement indices [@gwet2014]. Chance agreement expresses the probability that any two raters agree by chance. Kappa coefficients correct for chance agreement with the following expression:
@@ -67,8 +64,7 @@ The notion of <emph>chance agreement</emph> has a central role in the formulatio
 $$\kappa = \frac{p_a - p_e}{1 - p_e}$$
 where $p_a$ is the proportion of items on which any two raters agree, and $p_e$ is the chance agreement. For many coefficients, such as Fleiss' Kappa, the former is identical to the Agreement Rate (*AR*) of @Vatavu:2015.
 
-@Vatavu:2016 included a short discussion about chance-corrected coefficients and concluded that such statistics are not appropriate for gesture elicitation methodologies. Their argument is that gestural vocabularies are open-ended.  Participants choose from a infinite number of possibilities, thus the problem of chance agreement is non-existent. 
-The TOCHI article extensively discusses their argumentation and rejects their conclusion. 
+@Vatavu:2016 included a short discussion about chance-corrected coefficients and concluded that such statistics are not appropriate for gesture elicitation methodologies. Their argument is that gestural vocabularies are open-ended. Since participants choose from a infinite number of possibilities, the problem of chance agreement is non-existent. The TOCHI article extensively discusses their argumentation and rejects their conclusion. 
 
 ###Bias and Its Effect on Agreement
 In practice, agreement is not assessed over an infinite set of gesture possibilities. Participants’ gesture proposals are first classified into signs, and agreement is assessed over the sign vocabulary defined by that specific classification process. However, the article shows that even if we assumed an infinite number of signs. The reason is the presence of <emph>bias</emph>, an overall tendency of some signs to appear more frequently than others, independently of the referents. The article discusses usability, social, legacy, procedural, and classification biases, which can cause a small number of signs to dominate the results of a gesture elicitation study.
@@ -213,14 +209,14 @@ We see that AR values also capture random agreements that are not specific to th
 ###Interpreting Agreement Values
 @Vatavu:2015 proposed some generic guidelines on how to interpret the magnitude of agreement: AR < .100 is low agreement, .100 < AR < .300 is medium, .300 < AR < .500 is high, and AR > .500 is very high agreement. These guidelines derive from two types of analysis: (1) a probabilistic reasoning, and (2) a survey of agreement rates from past studies. 
 
-We showed earlier that AR can be misleading about the level of true agreement. For example, agreement rates for the study of @lahey2011 were AR = .251 (Session 2) and AR = .298 (Session 3). These values correspond to <b>medium agreement</b> according to @Vatavu:2015. However, my analysis shows a very low chance-corrected agreement for this study, where Fleiss' Kappa is equal to .040, 95% CI [-.064, .144] for Session 2, and .043, 95% CI [-.056, .141] for Session 3. Note that Fleiss' Kappa is not statistically significantly different than zero. Interestingly, this analysis confirms the conclusion of the authors who state: <i>"the consensus on the mapping of those bend gestures to actions was overall low, showing that each participant had his or her own preference.”</i> [@lahey2011]
+We showed earlier that AR can be misleading about the level of true agreement. For example, agreement rates for the study of @lahey2011 were AR = .251 (Session 2) and AR = .298 (Session 3). These values correspond to <b>medium agreement</b> according to @Vatavu:2015. However, my analysis shows a very low chance-corrected agreement for this study, where Fleiss' Kappa is equal to .040, 95% CI [-.064, .144] for Session 2, and .043, 95% CI [-.056, .141] for Session 3. Note that these values are not statistically significantly different than zero. This analysis confirms the conclusion of the authors who state: <i>"the consensus on the mapping of those bend gestures to actions was overall low, showing that each participant had his or her own preference.”</i> [@lahey2011]
 
 Furthermore, the probabilistic reasoning of @Vatavu:2015 has several errors. The article further explains that even if one corrects these errors, relying on statistics to assess the magnitude of agreement is not feasible. To this end, we need other criteria, such as usability metrics, and longer-term studies.
 
 ###Statistical Inference
-The third issue that the article investigates is how support statistical inference. Vatavu and Wobbrock have proposed two statistical tests to support hypothesis testing: (1) the Vrd statistic for comparing agreement rates within participants [@Vatavu:2015], and (2) the Vb statistic for comparing agreement rates between independent participant groups [@Vatavu:2016]. However, a careful analysis of these statistics shows that the probabilistic reasoning that the authors used to derive them has flaws. Their evaluation through Monte Carlo simulations further demonstrates that both statistics yield Type I error rates that are orders of magnitude higher than their nominal levels. 
+The third issue that the article investigates is how support statistical inference. A careful analysis of the *Vrd* and the *Vb* statistics of Vatavu and Wobbrock shows that the probabilistic reasoning that the authors used to derive them has flaws. Our Monte Carlo simulations further demonstrate that both statistics yield Type I error rates that are orders of magnitude higher than their nominal levels. 
 
-The following figure shows a live evaluation of the Vrd statistic. We repeatedly generate N random samples of proposals for two referents, where N represents the number of participants in a gesture elicitation study. We repeat the process by taking samples from nine source populations, where each approximates a different agreement rate AR, from .10 to .90. We observe that Type I errors are extremely large. The evaluation of the Vb statistic yields similar results, where Type I errors are again unacceptably high.
+The following figure shows a live evaluation of the *Vrd* statistic. We repeatedly generate N random samples of proposals for two referents, where N represents the number of participants in a gesture elicitation study. We repeat the process by taking samples from nine source populations, where each approximates a different agreement rate AR, from .10 to .90. We observe that Type I errors are extremely large. The evaluation of the Vb statistic yields similar results, where Type I errors are again unacceptably high.
 
 ```{r, echo = FALSE}
 source("Vrd.evaluation.R")
@@ -313,17 +309,17 @@ shinyApp(
 )
 ```
 
-The evaluations reported in the article consider different distribution models to simulate participants' proposals. My analysis of four gesture elicitation studies shows that models based on <b>Zipf-Mandelbrot distributions</b> approximate well frequencies that emerge in real datasets.
+The evaluations reported in the article consider different distribution models to simulate participants' proposals. Our analysis of four gesture elicitation studies shows that models based on <b>Zipf-Mandelbrot distributions</b> approximate well frequencies that emerge in real datasets. The simulation on the figure above makes use of such models.
 
 ##Remedies and Recommendations
-Fortunately, other research disciplines have long established methods to support statistical inference for agreement indices [@gwet2014]. Those are based on interval estimation and resampling methods, in particular jackknifing [@quenouille1949] and bootstrapping [@efron1979]. The TOCHI article further evaluates them in the context of gesture elicitation and shows how to apply them to analyze real datasets. However, the article also highights limitations of such methods. For example, jackknife and bootstrap confidence intervals can not be precise when applied to individual referents, and sample sizes are small. Driving conclusions based on statistical significance is not a good practice in this case. 
+Fortunately, other research disciplines have long established methods to support statistical inference for agreement indices [@gwet2014]. Those are based on interval estimation and resampling methods, in particular jackknifing [@quenouille1949] and bootstrapping [@efron1979]. The TOCHI article further evaluates them in the context of gesture elicitation and shows how to apply them to analyze real datasets. The article also discusses limitations of such methods. In particular, jackknife and bootstrap confidence intervals may not be precise when applied to individual referents, and sample sizes are small. In such cases, driving conclusions based on statistical significance is not a good practice. 
 
 Overall, not a single statistic is enough to capture the results of a gesture elicitation study. My recommendation is to report both raw percent agreement and chance-corrected agreement indices, as well as agreement indices specific to individual signs. A separate investigation of the observed bias distribution is also recommended for every gesture elicitation study. Finally, agreement scores have little value by themselves. In order to interpret them, one needs to know exactly what participants agree upon, i.e., know how signs are defined and how proposals are classified into these signs. It is therefore imperative that authors clarify how they define their sign vocabularies, how they classify observed gestures into these vocabularies, and how they verify the reliability of this classification process.
 
 ##Feedback and Comments
 I am not an expert in statistics, and writing this artcile has been a learning process for me. I will appreciate any feedback on mistakes or other problems that you may discover in my analyses. I am also interested in comments and suggestions on how to improve or extend this work. 
 
-Creating an R library for the the statistics recommended by the article is a future goal. For the moment, feel free to use the R code that is attached as supplementary material on this page. Please, contact me to indicate problems or ask questions about the code. 
+Creating an R library for the the statistics recommended by the article is a future goal. For the moment, feel free to use the [R code](https://github.com/ephanis/TOCHI-supplementary) provided as supplementary material for the article. Please, contact me to indicate problems or ask questions about how to use the code to conduct an analysis.
 
 ##References
 
