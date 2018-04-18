@@ -51,7 +51,7 @@ This year, I opened an introductory [course on statistical methods](https://www.
 *Participants are prompted with <emph>referents</emph>, or the effects of actions, and perform <emph>signs</emph> that cause those actions.*
 </blockquote>
 
-In our analysis, we distinguish between the physical gestures performed by participants and their signs. A sign can be thought of as the interpretation of an observed gesture, or otherwise, as a category that groups together ”equal” or ”similar” gestures. The classification observed gestures into signs is usually performed by humans.
+In our analysis, we distinguish between the physical gestures performed by participants and their signs. A sign can be thought of as the interpretation of an observed gesture, or otherwise, as a category that groups together ”equal” or ”similar” gestures. The classification of observed gestures into signs is usually performed by humans.
 
 If a sign occurs more than once for a referent, we infer that at least two participants <emph>agree</emph> on this sign. Researchers usually seek signs that enjoy wide agreement among users.
 
@@ -69,7 +69,7 @@ where $p_a$ is the proportion of items on which any two raters agree, and $p_e$ 
 ###Bias and Its Effect on Agreement
 In practice, agreement is not assessed over an infinite set of gesture possibilities. Participants’ gesture proposals are first classified into signs, and agreement is assessed over the sign vocabulary defined by that specific classification process. However, the article shows that even if we assumed an infinite number of signs. The reason is the presence of <emph>bias</emph>, an overall tendency of some signs to appear more frequently than others, independently of the referents. The article discusses usability, social, legacy, procedural, and classification biases, which can cause a small number of signs to dominate the results of a gesture elicitation study.
 
-Bias increases the likelihood of chance agreement and makes the use of the AR index problematic. The interactive figures below demonstrate how bias affects agreement scores under a simulation setting, when participants are blindfolded so they cannot see the referents for which they propose gestures. Fleiss' Kappa always gives values that are very close to zero, but AR values increase as bias becomes stronger. 
+Bias increases the likelihood of chance agreement and makes the use of the AR index problematic. The interactive figures below demonstrate how bias affects agreement scores under a simulation setting, when participants are blindfolded so they cannot see the referents for which they propose gestures. Fleiss' Kappa always gives values that are very close to zero, but AR values increase as bias becomes stronger. In conclusion, AR may also capture random agreements that are not specific to the referents of interest, and unfortunately, such agreements say nothing about how appropriate a given mapping between signs and referents is.
 
 ```{r, echo = FALSE}
 source("bias-distribution.R")
@@ -199,7 +199,7 @@ shinyApp(
 )
 ```
 
-We see that AR values also capture random agreements that are not specific to the referents that participants are exposed. Unfortunately, such agreements say nothing about how appropriate a given mapping between signs and referents is. Readers may still wonder whether such bias levels are realistic. The figure below shows bias distributions observed in four gesture elicitation studies published at CHI. We see that bias can be particulary high. What is more, it varies considerably across studies, which implies that comparisons based on agreement rates are problematic.  
+Readers may wonder whether the above bias levels are realistic. The figure below shows bias distributions observed in four gesture elicitation studies published at CHI. We see that bias can be particulary high and can vary considerably across studies. This implies that comparisons based on agreement rates are problematic. 
 
 <center>
 ![](bias-studies.png){ width=700px }
@@ -207,9 +207,9 @@ We see that AR values also capture random agreements that are not specific to th
 </center>
 
 ###Interpreting Agreement Values
-@Vatavu:2015 proposed some generic guidelines on how to interpret the magnitude of agreement: AR < .100 is low agreement, .100 < AR < .300 is medium, .300 < AR < .500 is high, and AR > .500 is very high agreement. These guidelines derive from two types of analysis: (1) a probabilistic reasoning, and (2) a survey of agreement rates from past studies. 
+@Vatavu:2015 proposed some generic guidelines on how to interpret the magnitude of agreement: AR < .100 is low agreement, .100 < AR < .300 is medium, .300 < AR < .500 is high, and AR > .500 is very high agreement. The guidelines derive from two types of analysis: (1) a probabilistic reasoning, and (2) a survey of agreement rates from past studies. 
 
-We showed earlier that AR can be misleading about the level of true agreement. For example, agreement rates for the study of @lahey2011 were AR = .251 (Session 2) and AR = .298 (Session 3). These values correspond to <b>medium agreement</b> according to @Vatavu:2015. However, my analysis shows a very low chance-corrected agreement for this study, where Fleiss' Kappa is equal to .040, 95% CI [-.064, .144] for Session 2, and .043, 95% CI [-.056, .141] for Session 3. Note that these values are not statistically significantly different than zero. This analysis confirms the conclusion of the authors who state: <i>"the consensus on the mapping of those bend gestures to actions was overall low, showing that each participant had his or her own preference.”</i> [@lahey2011]
+We showed earlier that AR can be misleading about the level of true agreement. For example, agreement rates for the study of @lahey2011 were AR = .251 (Session 2) and AR = .298 (Session 3). These values correspond to <b>medium agreement</b> according to @Vatavu:2015. However, my analysis shows a very low chance-corrected agreement for this study, where Fleiss' Kappa is equal to .040, 95% CI [-.064, .144] for Session 2, and .043, 95% CI [-.056, .141] for Session 3. These values are not statistically significantly different than zero. This analysis confirms the conclusion of the authors who state: <i>"the consensus on the mapping of those bend gestures to actions was overall low, showing that each participant had his or her own preference.”</i> [@lahey2011]
 
 Furthermore, the probabilistic reasoning of @Vatavu:2015 has several errors. The article further explains that even if one corrects these errors, relying on statistics to assess the magnitude of agreement is not feasible. To this end, we need other criteria, such as usability metrics, and longer-term studies.
 
