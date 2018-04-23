@@ -69,7 +69,7 @@ where $p_a$ is the proportion of items on which any two raters agree, and $p_e$ 
 ###Bias and Its Effect on Agreement
 In practice, agreement is not assessed over an infinite set of gesture possibilities. Participants’ gesture proposals are first classified into signs, and agreement is assessed over the sign vocabulary defined by that specific classification process. However, the article shows that even if one assumes an infinite number of signs, the problem of chance agreement does not disappear. This is due to the presence of <emph>bias</emph>, the overall tendency of some signs to appear more frequently than others, independently of the referents. The article discusses usability, social, legacy, procedural, and classification biases, which can cause a small number of signs to dominate the results of a gesture elicitation study.
 
-Bias increases the likelihood of chance agreement and makes the use of the AR index problematic. The interactive figures below demonstrate how bias affects agreement scores under a simulation setting, when participants are blindfolded so they cannot see the referents for which they propose gestures. Fleiss' Kappa always gives values that are very close to zero, but AR values increase as bias becomes stronger. In conclusion, AR may also capture random agreements that are not specific to the referents of interest, and unfortunately, such agreements say nothing about how appropriate a given mapping between signs and referents is.
+Bias increases the likelihood of chance agreement and makes the use of the AR index problematic. The interactive figures below demonstrate how bias affects agreement scores under a simulation setting, where participants are *blindfolded* while they propose gestures. As participants cannot see the referents, they try to randomly guess. However, it is possible that their guesses are biased towards a smaller set of gestures, such as obvious (or default) gestures or gestures that require less physical and cognitive effort. In this case, Fleiss' Kappa always gives values that are very close to zero, but AR values increase as bias becomes stronger. In other words, AR may also capture random agreements that are not specific to the referents of interest. Unfortunately, such agreements say nothing about how appropriate a given mapping between signs and referents is.
 
 ```{r, echo = FALSE}
 source("bias-distribution.R")
@@ -199,19 +199,21 @@ shinyApp(
 )
 ```
 
-Readers may wonder whether the above bias levels are realistic. The figure below shows bias distributions observed in four gesture elicitation studies published at CHI. We see that bias can be particulary high and can vary considerably across studies. This implies that comparisons based on agreement rates are problematic. 
+Readers may wonder whether such bias levels are realistic. The figure below shows bias distributions observed in four gesture elicitation studies published at CHI. We see that bias can be particulary high and can vary considerably across studies. This indicates that comparisons based on agreement rates are generally problematic. 
 
 <center>
 ![](bias-studies.png){ width=700px }
-<div style="padding:36px;padding-top:8px;padding-bottom:0px;font-size:14px"><b style="color:sienna">Observed</b> bias distributions for our four case studies. We also show the <b style="color:DarkBlue">closest model</b> of bias distribution.</div>
+<div style="padding:36px;padding-top:8px;padding-bottom:0px;font-size:14px"><b style="color:sienna">Observed</b> bias distributions for our four case studies. </br>We also show the <b style="color:DarkBlue">closest model</b> of bias distribution and the overall probability of chance agreement $p_e$.</div>
 </center>
 
 ###Interpreting Agreement Values
 @Vatavu:2015 proposed some generic guidelines on how to interpret the magnitude of agreement: AR < .100 is low agreement, .100 < AR < .300 is medium, .300 < AR < .500 is high, and AR > .500 is very high agreement. The guidelines derive from two types of analysis: (1) a probabilistic reasoning, and (2) a survey of agreement rates from past studies. 
 
-We showed earlier that AR can be misleading about the level of true agreement. For example, agreement rates for the study of @lahey2011 were AR = .251 (Session 2) and AR = .298 (Session 3). These values correspond to <b>medium agreement</b> according to @Vatavu:2015. However, my analysis shows a very low chance-corrected agreement for this study, where Fleiss' Kappa is equal to .040, 95% CI [-.064, .144] for Session 2, and .043, 95% CI [-.056, .141] for Session 3. These values are not statistically significantly different than zero. This analysis confirms the conclusion of the authors who state: <i>"the consensus on the mapping of those bend gestures to actions was overall low, showing that each participant had his or her own preference.”</i> [@lahey2011]
+We showed earlier that AR can be misleading about the level of true agreement. For example, agreement rates for the study of @lahey2011 were AR = .251 (Session 2) and AR = .298 (Session 3). These values correspond to <b>medium agreement</b> according to @Vatavu:2015. However, my analysis shows a very low chance-corrected agreement for this study, where Fleiss' Kappa is equal to .040, 95% CI [-.064, .144] for Session 2, and .043, 95% CI [-.056, .141] for Session 3. These values are not even statistically significantly different than zero. 
 
-Furthermore, the probabilistic reasoning of @Vatavu:2015 has several errors. The article further explains that even if one corrects these errors, relying on statistics to assess the magnitude of agreement is not feasible. To this end, we need other criteria, such as usability metrics, and longer-term studies.
+This analysis confirms the conclusion of the authors who state: <i>"the consensus on the mapping of those bend gestures to actions was overall low, showing that each participant had his or her own preference”</i> [@lahey2011]. In this case, the authors relied on intuition and common sense to reach the right conclusion, despite the fact that their A scores were similar or higher than representative averages of older gesture-elicitation studies [@Wobbrock:2005;@Wobbrock:2009].
+
+In addition, the probabilistic reasoning of @Vatavu:2015 has flaws. The article further explains that even if one corrects these flaws, relying on statistics to assess the magnitude of agreement is not feasible. To this end, we need other criteria, such as usability metrics and longer-term studies.
 
 ###Statistical Inference
 The third issue that the article investigates is how support statistical inference. A careful analysis of the *Vrd* and the *Vb* statistics of Vatavu and Wobbrock shows that the probabilistic reasoning that the authors used to derive them has flaws. Our Monte Carlo simulations further demonstrate that both statistics yield Type I error rates that are orders of magnitude higher than their nominal levels. 
@@ -317,9 +319,9 @@ Fortunately, other research disciplines have long established methods to support
 Overall, not a single statistic is enough to capture the results of a gesture elicitation study. My recommendation is to report both raw percent agreement and chance-corrected agreement indices, as well as agreement indices specific to individual signs. A separate investigation of the observed bias distribution is also recommended for every gesture elicitation study. Finally, agreement scores have little value by themselves. In order to interpret them, one needs to know exactly what participants agree upon, i.e., know how signs are defined and how proposals are classified into these signs. It is therefore imperative that authors clarify how they define their sign vocabularies, how they classify observed gestures into these vocabularies, and how they verify the reliability of this classification process.
 
 ##Feedback and Comments
-I am not an expert in statistics, and writing this artcile has been a learning process for me. I will appreciate any feedback on mistakes or other problems that you may discover in my analyses. I am also interested in comments and suggestions on how to improve or extend this work. 
+I am not a statistician, and writing this artcile has been a learning process for me. I will appreciate any feedback on mistakes or other problems that you may discover in my analyses. I am also interested in comments and suggestions on how to improve or extend this work. 
 
-Creating an R library for the the statistics recommended by the article is a future goal. For the moment, feel free to use the [R code](https://github.com/ephanis/TOCHI-supplementary) provided as supplementary material for the article. Please, contact me to indicate problems or ask questions about how to use the code to conduct an analysis.
+Creating an easy-to-use R package for the the statistics recommended by the article is a future goal. For the moment, feel free to use the [R code](https://github.com/ephanis/TOCHI-supplementary) provided as supplementary material for the article. Please, contact me to indicate problems or ask questions about how to use the code to conduct your analyses.
 
 ##References
 
