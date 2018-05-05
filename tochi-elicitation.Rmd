@@ -1,9 +1,9 @@
 ---
+css: styles.css
 title: 'Fallacies of Agreement: A Critical Review of Consensus Assessment Methods
   for Gesture Elicitation'
-css: styles.css
 runtime: shiny
-link-citations: yes
+link-citations: no
 fig_caption: yes
 output:
   html_document:
@@ -15,7 +15,7 @@ bibliography: bibliography.bib
 [ <email>theophanis.tsandilas@inria.fr</email> ]
 <br/>Inria, Univ Paris-Sud, and Université Paris-Saclay
 
-<div style="background-color:#F8F8FF;padding:26px;padding-top:1px;text-align:justify; outline-style:solid; outline-width:1px";>
+<div style="background-color:#F8F8FD;padding:26px;padding-top:1px;text-align:justify; outline-style:solid; outline-width:1px";>
 ##Abstract
 Discovering gestures that gain consensus is a key goal of gesture elicitation. To this end, HCI research has developed statistical methods to reason about agreement. We review these methods and identify three major problems. First, we show that raw agreement rates disregard agreement that occurs by chance and do not reliably capture how participants distinguish among referents. Second, we explain why current recommendations on how to interpret agreement scores rely on problematic assumptions. Third, we demonstrate that significance tests for comparing agreement rates, either within or between participants, yield large Type I error rates ($> 40\%$ for $\alpha = .05$).
 
@@ -28,15 +28,17 @@ As alternatives, we present agreement indices that are routinely used in inter-r
 The article will appear at the <i>ACM Transanctions on Computer-Human Interaction (TOCHI)</i>, but you can download a [[PDF; 2.9MB]](https://www.lri.fr/~fanis/docs/gelicitation.pdf) preprint, author version of the article (50 pages).
 
 Results from additional experiments can be downloaded as suplementary material [[PDF; 128KB]](https://www.lri.fr/~fanis/agreement/tochi-supplementary.pdf).
-You can also check the [R code](https://github.com/ephanis/TOCHI-supplementary) that I used for the analyses reported in the paper.
+You can also check the [R code](https://github.com/ephanis/TOCHI-supplementary) that I used for the analyses reported in the paper. A case study that demonstrates how to use it to analyze real datasets is available [on this page](https://www.lri.fr/~fanis/tochi2018/agreement-case-study.html).
 
-The article was partly based on a research report that I co-authored with Pierre Dragicevic back in September 2015:
+The article is partly based on a research report that I co-authored with Pierre Dragicevic back in September 2015:
 
 <blockquote style="font-size: 16px">
 Theophanis Tsandilas and Pierre Dragicevic. [Accounting for Chance Agreement in Gesture Elicitation Studies](https://hal.archives-ouvertes.fr/hal-01267288/document). *Research Report 1584, LRI - CNRS, University Paris-Sud*, Feb 2016, 5 pages.
 </blockquote>
 
 **Special Acknowledgment:** Pierre's contribution to this work has been significant and includes writing, developing R code, and engaging in long discussions. I encourage the readers to check his page on [statistical communication for HCI](http://www.aviz.fr/badstats). 
+
+
 
 This year, I opened an introductory [course on statistical methods](https://www.lri.fr/~fanis/courses/Stats2017/), which gave particular emphasis on how to test the assumptions of statistical procedures with simple Monte Carlo simulations. Many of the results that I report in the TOCHI article to evaluate the statistics are based on such simple simulations. The course's material is still preliminary, but I hope to drastically improve it in the folllowing academic years. 
 
@@ -179,7 +181,7 @@ shinyApp(
     
     title(xlab="Agreement Score", ylab="Probability (%)")
     legend("topright", inset=.01, legend=c("Fleiss' Kappa", "Agreement Rate (AR)"), 
-           fill=c(rgb(.86,.86,.95), rgb(.93,.8,.5)), horiz=FALSE, cex=1.1, box.lty=0)
+           fill=c(rgb(.86,.86,.95), rgb(.93,.8,.5)), horiz=FALSE, cex=1, box.lty=0)
 
     isolate({ vals$counter <- vals$counter + 1})
 
@@ -202,18 +204,18 @@ shinyApp(
 Readers may wonder whether such bias levels are realistic. The figure below shows bias distributions observed in four gesture elicitation studies published at CHI. We see that bias can be particulary high and can vary considerably across studies. This indicates that comparisons based on agreement rates are generally problematic. 
 
 <center>
-![](bias-studies.png){ width=700px }
+![](bias-studies.png){ width=760px }
 <div style="padding:36px;padding-top:8px;padding-bottom:0px;font-size:14px"><b style="color:sienna">Observed</b> bias distributions for our four case studies. </br>We also show the <b style="color:DarkBlue">closest model</b> of bias distribution and the overall probability of chance agreement $p_e$.</div>
 </center>
 
 ###Interpreting Agreement Values
 @Vatavu:2015 proposed some generic guidelines on how to interpret the magnitude of agreement: AR < .100 is low agreement, .100 < AR < .300 is medium, .300 < AR < .500 is high, and AR > .500 is very high agreement. The guidelines derive from two types of analysis: (1) a probabilistic reasoning, and (2) a survey of agreement rates from past studies. 
 
-We showed earlier that AR can be misleading about the level of true agreement. For example, agreement rates for the study of @lahey2011 were AR = .251 (Session 2) and AR = .298 (Session 3). These values correspond to <b>medium agreement</b> according to @Vatavu:2015. However, my analysis shows a very low chance-corrected agreement for this study, where Fleiss' Kappa is equal to .040, 95% CI [-.064, .144] for Session 2, and .043, 95% CI [-.056, .141] for Session 3. These values are not even statistically significantly different than zero. 
+We showed earlier that AR can be misleading about the level of true agreement. For example, agreement rates for the study of @lahey2011 were AR = .251 (Session 2) and AR = .298 (Session 3). These values correspond to <b>medium agreement</b> according to @Vatavu:2015. However, our analysis shows a very low chance-corrected agreement for this study, where Fleiss' Kappa is equal to .040, 95% CI [-.064, .144] for Session 2, and .043, 95% CI [-.056, .141] for Session 3. These values are not even statistically significantly different than zero. 
 
 This analysis confirms the conclusion of the authors who state: <i>"the consensus on the mapping of those bend gestures to actions was overall low, showing that each participant had his or her own preference”</i> [@lahey2011]. In this case, the authors relied on intuition and common sense to reach the right conclusion, despite the fact that their A scores were similar or higher than representative averages of older gesture-elicitation studies [@Wobbrock:2005;@Wobbrock:2009].
 
-In addition, the probabilistic reasoning of @Vatavu:2015 has flaws. The article further explains that even if one corrects these flaws, relying on statistics to assess the magnitude of agreement is not feasible. To this end, we need other criteria, such as usability metrics and longer-term studies.
+Even if one forgets the problem of chance agreement, the probabilistic reasoning of @Vatavu:2015 has flaws that lead to arbitrary conclusions. The article further explains that even if one corrects these flaws, relying on statistics to assess the magnitude of agreement is not feasible. To this end, we need other criteria, such as usability metrics and longer-term studies.
 
 ###Statistical Inference
 The third issue that the article investigates is how support statistical inference. A careful analysis of the *Vrd* and the *Vb* statistics of Vatavu and Wobbrock shows that the probabilistic reasoning that the authors used to derive them has flaws. Our Monte Carlo simulations further demonstrate that both statistics yield Type I error rates that are orders of magnitude higher than their nominal levels. 
@@ -321,7 +323,9 @@ Overall, not a single statistic is enough to capture the results of a gesture el
 ##Feedback and Comments
 I am not a statistician, and writing this artcile has been a learning process for me. I will appreciate any feedback on mistakes or other problems that you may discover in my analyses. I am also interested in comments and suggestions on how to improve or extend this work. 
 
-Creating an easy-to-use R package for the the statistics recommended by the article is a future goal. For the moment, feel free to use the [R code](https://github.com/ephanis/TOCHI-supplementary) provided as supplementary material for the article. Please, contact me to indicate problems or ask questions about how to use the code to conduct your analyses.
+Creating an easy-to-use R package for the the statistics recommended by the article is a future goal. For the moment, you can use the [R code](https://github.com/ephanis/TOCHI-supplementary) provided as supplementary material. Please, go through [the case study](https://www.lri.fr/~fanis/tochi2018/agreement-case-study.html) for concrete examples. Feel free to contact me to indicate problems or ask questions.
+
+This page has been implemented with [Shiny](https://shiny.rstudio.com/), and its code is publically available [here](https://github.com/ephanis/Agreement-TOCHI).
 
 ##References
 
