@@ -27,7 +27,7 @@ As alternatives, we present agreement indices that are routinely used in inter-r
 ##Materials
 The article will appear at the <i>ACM Transanctions on Computer-Human Interaction (TOCHI)</i>, but you can download a [[PDF; 2.9MB]](https://hal.archives-ouvertes.fr/hal-01788775/document) preprint, author version of the article (50 pages).
 
-Results from additional experiments can be downloaded as suplementary material [[PDF; 128KB]](https://www.lri.fr/~fanis/agreement/tochi-supplementary.pdf).
+Results from additional experiments can be downloaded as suplementary material [[PDF; 128KB]](https://www.lri.fr/~fanis/tochi2018/tochi-supplementary.pdf).
 You can also check the [R code](https://github.com/ephanis/TOCHI-supplementary) that I used for the analyses reported in the paper. A case study that demonstrates how to use it to analyze real datasets is available [on this page](https://www.lri.fr/~fanis/tochi2018/agreement-case-study.html).
 
 The article is partly based on a research report that I co-authored with Pierre Dragicevic back in September 2015:
