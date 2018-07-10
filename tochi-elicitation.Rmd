@@ -27,7 +27,7 @@ As alternatives, we present agreement indices that are routinely used in inter-r
 ##Materials
 The full reference information for the article is as follows: 
 <blockquote style="font-size: 16px">
-Theophanis Tsandilas. Fallacies of Agreement: A Critical Review of Consensus Assessment Methods for Gesture Elicitation. *ACM Transanctions of Computer-Human Interaction (TOCHI)*, 25, 3, Article 18, June 2018, 49 pages [[doi.org/10.1145/3182168]](https://doi.org/10.1145/3182168) [[bibtext]](https://github.com/ephanis/Agreement-TOCHI/tsandilas-2018.bib)
+Theophanis Tsandilas. Fallacies of Agreement: A Critical Review of Consensus Assessment Methods for Gesture Elicitation. *ACM Transanctions of Computer-Human Interaction (TOCHI)*, 25, 3, Article 18, June 2018, 49 pages [[doi.org/10.1145/3182168]](https://doi.org/10.1145/3182168) [[bibtext]](https://raw.githubusercontent.com/ephanis/Agreement-TOCHI/master/tsandilas-2018.bib)
 </blockquote>
 
 You can also download an [author version](https://hal.archives-ouvertes.fr/hal-01788775/document) of the article (49 pages).
