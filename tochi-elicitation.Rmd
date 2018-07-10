@@ -13,9 +13,9 @@ bibliography: bibliography.bib
 
 <author>Theophanis Tsandilas</author>
 [ <email>theophanis.tsandilas@inria.fr</email> ]
-<br/>Inria, Univ Paris-Sud, and Université Paris-Saclay
+<br/>Inria, Univ. Paris-Sud, and Université Paris-Saclay
 
-<div style="background-color:#F8F8FD;padding:26px;padding-top:1px;text-align:justify; outline-style:solid; outline-width:1px";>
+<div style="background-color:#F8F2E5;padding:26px;padding-top:1px;text-align:justify; outline-style:solid; outline-width:0px";>
 ##Abstract
 Discovering gestures that gain consensus is a key goal of gesture elicitation. To this end, HCI research has developed statistical methods to reason about agreement. We review these methods and identify three major problems. First, we show that raw agreement rates disregard agreement that occurs by chance and do not reliably capture how participants distinguish among referents. Second, we explain why current recommendations on how to interpret agreement scores rely on problematic assumptions. Third, we demonstrate that significance tests for comparing agreement rates, either within or between participants, yield large Type I error rates ($> 40\%$ for $\alpha = .05$).
 
@@ -25,7 +25,12 @@ As alternatives, we present agreement indices that are routinely used in inter-r
 **Keywords:** *Gesture elicitation, agreement rates, agreement indices, bias, chance agreement, kappa coefficients, confidence intervals, replication, statistics, content-analysis methods*
 
 ##Materials
-The article will appear at the <i>ACM Transanctions on Computer-Human Interaction (TOCHI)</i>, but you can download a [[PDF; 2.9MB]](https://hal.archives-ouvertes.fr/hal-01788775/document) preprint, author version of the article (50 pages).
+The full reference information for the article is as follows: 
+<blockquote style="font-size: 16px">
+Theophanis Tsandilas. Fallacies of Agreement: A Critical Review of Consensus Assessment Methods for Gesture Elicitation. *ACM Transanctions of Computer-Human Interaction (TOCHI)*, 25, 3, Article 18, June 2018, 49 pages [[doi.org/10.1145/3182168]](https://doi.org/10.1145/3182168) [[bibtext]](https://github.com/ephanis/Agreement-TOCHI/tsandilas-2018.bib)
+</blockquote>
+
+You can also download an [author version](https://hal.archives-ouvertes.fr/hal-01788775/document) of the article (49 pages).
 
 Results from additional experiments can be downloaded as suplementary material [[PDF; 128KB]](https://www.lri.fr/~fanis/tochi2018/tochi-supplementary.pdf).
 You can also check the [R code](https://github.com/ephanis/TOCHI-supplementary) that I used for the analyses reported in the paper. A case study that demonstrates how to use it to analyze real datasets is available [on this page](https://www.lri.fr/~fanis/tochi2018/agreement-case-study.html).
@@ -33,7 +38,8 @@ You can also check the [R code](https://github.com/ephanis/TOCHI-supplementary) 
 The article is partly based on a research report that I co-authored with Pierre Dragicevic back in September 2015:
 
 <blockquote style="font-size: 16px">
-Theophanis Tsandilas and Pierre Dragicevic. [Accounting for Chance Agreement in Gesture Elicitation Studies](https://hal.archives-ouvertes.fr/hal-01267288/document). *Research Report 1584, LRI - CNRS, University Paris-Sud*, Feb 2016, 5 pages.
+Theophanis Tsandilas and Pierre Dragicevic. [Accounting for Chance Agreement in Gesture Elicitation Studies](https://hal.archives-ouvertes.fr/hal-01267288/document). *Research Report 1584, LRI - CNRS, University Paris-Sud*, Feb 2016, 5 pages
+[[bibtext]](https://hal.archives-ouvertes.fr/hal-01267288v1/bibtex)
 </blockquote>
 
 **Special Acknowledgment:** Pierre's contribution to this work has been significant and includes writing, developing R code, and engaging in long discussions. I encourage the readers to check his page on [statistical communication for HCI](http://www.aviz.fr/badstats). 
