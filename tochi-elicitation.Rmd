@@ -33,7 +33,7 @@ Theophanis Tsandilas. Fallacies of Agreement: A Critical Review of Consensus Ass
 You can also download an [author version](https://hal.archives-ouvertes.fr/hal-01788775/document) of the article (49 pages).
 
 Results from additional experiments can be downloaded as suplementary material [[PDF; 128KB]](https://www.lri.fr/~fanis/tochi2018/tochi-supplementary.pdf).
-You can also check the [R code](https://github.com/ephanis/TOCHI-supplementary) that I used for the analyses reported in the paper. A case study that demonstrates how to use it to analyze real datasets is available [on this page](https://www.lri.fr/~fanis/tochi2018/agreement-case-study.html).
+You can also check the [R code](https://github.com/ephanis/TOCHI-supplementary) that I used for the analyses reported in the paper. Please, see this  [**CASE STUDY**](https://www.lri.fr/~fanis/tochi2018/agreement-case-study.html) that demonstrates how to use the code to analyze real datasets.
 
 The article is partly based on a research report that I co-authored with Pierre Dragicevic back in September 2015:
 
@@ -329,7 +329,7 @@ Overall, a single statistic is not enough to capture the results of a gesture el
 ##Feedback and Comments
 I am not a statistician, and writing this artcile has been a learning process for me. I will appreciate any feedback on mistakes or other problems that you may discover in my analyses. I am also interested in comments and suggestions on how to improve or extend this work. 
 
-Creating an easy-to-use R package for the the statistics recommended by the article is a future goal. For the moment, you can use the [R code](https://github.com/ephanis/TOCHI-supplementary) provided as supplementary material. Please, go through [the case study](https://www.lri.fr/~fanis/tochi2018/agreement-case-study.html) for concrete examples. Feel free to contact me to indicate problems or ask questions.
+Creating an easy-to-use R package for the the statistics recommended by the article is a future goal. For the moment, you can use the [R code](https://github.com/ephanis/TOCHI-supplementary) provided as supplementary material. Please, go through the [**CASE STUDY**](https://www.lri.fr/~fanis/tochi2018/agreement-case-study.html) for concrete examples. Feel free to contact me to indicate problems or ask questions.
 
 This page has been implemented with [Shiny](https://shiny.rstudio.com/), and its code can be downloaded from [here](https://github.com/ephanis/Agreement-TOCHI).
 
