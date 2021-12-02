@@ -1,0 +1,288 @@
+---
+css: ../styles.css
+title: "Agreement Analysis for Gesture Elicitation: A Case Study"
+author: Theophanis Tsandilas
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document:
+    df_print: paged
+bibliography: ../bibliography.bib
+---
+The page demonstrates how to use the R code provided [here](https://github.com/ephanis/TOCHI-supplementary) to analyze agreement for a gesture elicitation study. The statistical methods that we discuss are described in more depth by the following papers:
+
+<blockquote style="font-size: 16px">
+Theophanis Tsandilas. Fallacies of Agreement: A Critical Review of Consensus Assessment Methods for Gesture Elicitation. *ACM Transactions on Computer-Human Interaction (TOCHI)*, 25, 3, Article 18, June 2018, 49 pages [[doi.org/10.1145/3182168]](https://doi.org/10.1145/3182168) [[bibtext]](https://raw.githubusercontent.com/ephanis/Agreement-TOCHI/master/tsandilas-2018.bib) [[project page]](https://agreement.lri.fr/)
+</blockquote>
+
+<blockquote style="font-size: 16px">
+Theophanis Tsandilas and Pierre Dragicevic. Accounting for Chance Agreement in Gesture Elicitation Studies. *Research Report 1584, LRI - CNRS, University Paris-Sud*, Feb 2016, 5 pages
+<br/>
+[[pdf]](https://hal.archives-ouvertes.fr/hal-01267288/document) [[bibtext]](https://hal.archives-ouvertes.fr/hal-01267288v1/bibtex)
+</blockquote>
+
+@Bailly2013 investigated gestural shortcuts for their Métamorphe keyboard. Métamorphe is a keyboard with actuated keys that can sense user gestures, such as pull, twist, and push sideways. In this study, **20 participants** suggested a keyboard shortcut for **42 referents** on a Métamorphe mockup. Proposing a shortcut required choosing (i) a key and (ii) the gesture applied to the key. @Bailly2013 treated shortcuts as a whole but also analyzed keys and gestures separately. Here, we analyze them separately. Participants produced a total of 71 unique signs for keys and 27 unique signs for gestures. 
+
+[This is the original dataset](https://github.com/ephanis/TOCHI-supplementary/blob/master/data/bailly%20et%20al%202013%20-%20dataset.csv) as provided by the authors.
+
+## Reading the Dataset
+As a first step we need to read the data frame by using the appropriate format:
+
+```{r warning=FALSE}
+source("coefficients/agreement.CI.R")
+source("coefficients/agreement.coefficients.R")
+
+data <- read.csv("data/bailly et al 2013 - dataset.csv", stringsAsFactors=F)
+
+# For each participant, there are five columns, where the first captures the key and the second captures the gesture  
+keys <- data[, seq(2, ncol(data), by=5)] # These are participants' proposals of keys
+gestures <- data[, seq(3, ncol(data), by=5)] # These are participants' proposals of key gestures
+
+# Replace the column names by the participant IDs
+names(keys) <- paste0("P", 1:ncol(keys))
+names(gestures) <- paste0("P", 1:ncol(gestures))
+```
+
+The resulting *gestures* data frame is as follows:
+
+```{r warning=FALSE, echo=FALSE}
+library(knitr)
+library(kableExtra)
+kable(gestures, "html") %>%
+  kable_styling(bootstrap_options = "striped", full_width = F, position = "left", font_size = 14) %>%
+  scroll_box(width = "910px", height = "200px")
+```
+
+## Overall Agreement
+We estimate the overall agreement observed in this study. We construct interval estimates for <emph>percent agreement</emph>, <emph>Fleiss' Kappa</emph>, and <emph>Krippendorf's alpha</emph>, where percent agreement is equivalent to the <emph>AR</emph> index [@Vatavu:2015]. We use the jackknife technique to construct 95% confidence intervals.
+
+### Agreement on Keys
+```{r warning=FALSE, results='hold'}
+percent <- jack.CI.random.raters(keys, percent.agreement)
+kappa <- jack.CI.random.raters(keys, fleiss.kappa)
+alpha <- jack.CI.random.raters(keys, krippen.alpha)
+  
+printCI("  Percent agreement", percent)
+printCI("      Fleiss' Kappa", kappa)
+printCI("Krippendorf's alpha", alpha) 
+```
+
+We observe that Krippendorf's alpha is almost identical to Fleiss' Kappa. According to @gwet2014, when there are no missing data and the number of participants is greater than five, the results of the two indices are generally very close.
+
+### Agreement on Key Gestures
+```{r warning=FALSE, results='hold'}
+percent <- jack.CI.random.raters(gestures, percent.agreement)
+kappa <- jack.CI.random.raters(gestures, fleiss.kappa)
+alpha <- jack.CI.random.raters(gestures, krippen.alpha)
+  
+printCI("  Percent agreement", percent)
+printCI("      Fleiss' Kappa", kappa)
+printCI("Krippendorf's alpha", alpha) 
+```
+
+We observe now a larger discripency between percent agreement and chance-corrected indices, which is clearly due to a higher chance agreement. 
+
+## Chance Agreement and Bias
+Let's estimate the chance agreement for both keys and their gestures: 
+
+```{r warning=FALSE, results='hold'}
+chance.keys <- jack.CI.random.raters(keys, chance.agreement)
+chance.gestures <- jack.CI.random.raters(gestures, chance.agreement)
+  
+printCI("    Chance agreement (Keys)", chance.keys)
+printCI("Chance agreement (Gestures)", chance.gestures)
+```
+
+We observe that chance agreement becomes substantial for gestures. It can be partly explained by the smaller number of unique signs observed for gestures: 27 signs for gestures vs. 71 signs for keys. However, this is not the only explanation. We calculate the frequency of signs across all referents.
+
+```{r warning=FALSE, results='hold'}
+signs <- unlist(gestures)
+counts <- sort(table(signs), decreasing = T)
+freq <- counts/sum(counts)
+
+print("Frequency (%) of the six most frequent signs:")
+print(head(freq)*100)
+```
+
+We observe that the *top* sign (regular key press) accounted alone for 28% of all gesture proposals. 
+It is likely that this sign served as a "default" sign, when participants could not come up with a meaningful gesture.
+This <emph>bias</emph> towards a single sign increases the likelihood of agreement by chance. Also notice that the six most frequent signs accounted for 70.5% of all gesture proposals. 
+
+## Agreement Specific to Signs
+For the rest of our analysis, we focus on the key gestures. In addition to overall agreement, we calculate <emph>agreement specific to signs</emph> (or <emph>specific agreement</emph>):
+
+```{r warning=FALSE, results='hold'}
+source("coefficients/specific.agreement.CI.R")
+specific <- specific.agreement.CI(gestures) # A data frame with interval estimates and sign frequencies
+specific <- specific[with(specific, order(-Freq)),] # Sort the signs by their frequencies
+```
+
+We then plot specific agreements with their 95% jackknife CIs. We also display the sign frequencies (percentages in red):
+
+```{r warning=FALSE, results='hold', fig.height = 2.4, fig.width = 11}
+library(ggplot2)
+
+signs <- specific$Category # Get the names of the signs
+
+plot <- ggplot(specific, aes(x = Category, y = Specific)) + 
+  geom_point(size = 1.8, color = "#0000aa", shape = 1) +
+  scale_x_discrete(name ="Sign", limits = signs) +
+  scale_y_continuous(breaks=c(0, 0.2, 0.4, 0.6, 0.8, 1)) + theme_bw() +
+  geom_errorbar(aes(ymax = Upper, ymin = Lower), width=0.01, color = "#0000aa") +
+  geom_text(aes(label = sprintf("%2.1f%%", Freq), y = -.15), color="red", size=3.1, vjust=0) +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_text(angle = 40, vjust = 1, hjust = 1, size = 10), 
+        axis.text.y = element_text(size = 12)) +
+  theme(panel.border = element_blank(), panel.grid.major.x = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        panel.grid.major = element_line(colour = "#000000", size=0.03)) + 
+  ylab("Specific Agreement")
+
+print(plot)
+```
+
+We observe that agreement has been only observed for 13 signs, other signs have appeared with no consensus among participants. The above calculation does not account for chance agreement. @spitzer:1974 argue that agreement specific to categories should be also corrected for chance agreement. To this end, we can use a simple formulation described by @uebersax:1982, which assumes that the bias distribution is common across all raters (participants in our case).
+
+```{r warning=FALSE, results='hold'}
+specific.corrected <- chance.corrected.specific.agreement.CI(gestures) 
+specific.corrected <- specific.corrected[with(specific.corrected, order(-Freq)),]
+```
+
+We can again plot the chance-corrected specific agreement as before to produce the following graph:
+
+```{r warning=FALSE, results='hold', fig.height = 2.4, fig.width = 11, echo = FALSE}
+signs <- specific.corrected$Category # Get the names of the signs
+
+plot <- ggplot(specific.corrected, aes(x = Category, y = Specific)) + 
+  geom_point(size = 1.8, color = "#0000aa", shape = 1) +
+  scale_x_discrete(name ="Sign", limits = signs) +
+  scale_y_continuous(breaks=c(0, 0.2, 0.4, 0.6, 0.8, 1)) + theme_bw() +
+  geom_errorbar(aes(ymax = Upper, ymin = Lower), width=0.01, color = "#0000aa") +
+  geom_text(aes(label = sprintf("%2.1f%%", Freq), y = -.15), color="red", size=3.1, vjust=0) +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_text(angle = 40, vjust = 1, hjust = 1, size = 10), 
+        axis.text.y = element_text(size = 12)) +
+  theme(panel.border = element_blank(), panel.grid.major.x = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        panel.grid.major = element_line(colour = "#000000", size=0.03)) + 
+  ylab("Specific Agreement")
+
+print(plot)
+```
+
+Notice that chance correction penalizes the very frequent signs, such as the *top* sign, but has little effect on less frequent signs. We observe a particularly high agreement on the use of the *CW/CCW* sign (turn the key clockwise or counter-clockwise). Such agreement did not emerge by chance, as its use was not arbitrary but rather selective and consistent across participants.  
+
+For the analyses reported in the TOCHI article, specific agreement has not been corrected for chance agreement. However, agreement values are interpreted by taking into account their observed sign frequencies. Both approaches are valid as long as the authors are clear about their analyses and also report the bias distributions that they observe.
+
+## Agreement over Individual Referents
+We can also use Fleiss' Kappa for individual (or groups of) referents by assuming a common chance agreement across all referents:
+
+```{r warning=FALSE, results='hold'}
+refs <- list() # referents list
+k <- list() # Kappa estimates
+l <- list() # Lower bounds of 95% CI
+u <- list() # Upper bounds of 95% CI
+
+for(index in 1:nrow(gestures)){ 
+    # Construct the jackknife CI for Fleiss' Kappa of each referent
+    ci <- jack.CI.random.raters.fleiss.kappa.for.item(gestures, index)
+    
+    refs[index] <- data[index, 1]
+    k[index] <- ci[1] 
+    l[index] <- ci[2] 
+    u[index] <- ci[3] 
+}
+
+# Create a data frame with all the estimates
+fleiss.df <- data.frame(Referent = as.character(refs), Kappa = as.double(k), Low = as.double(l), Upper = as.double(u))
+
+# Sort the referents by their agreement values
+fleiss.df <- fleiss.df[with(fleiss.df, order(-Kappa)),]
+```
+
+We can then plot our results as follows:
+
+```{r warning=FALSE, results='hold', fig.height = 2.4, fig.width = 12}
+referents <- fleiss.df$Referent
+
+plot <- ggplot(fleiss.df, aes(x = Referent, y = Kappa)) +
+  geom_hline(yintercept = 0, color = "red", size = .2) +
+  geom_point(size = 1.8, color = "#0000aa", shape = 1) +
+  scale_x_discrete(name ="Referent", limits = referents) +
+  scale_y_continuous(breaks=c(-0.2, 0, 0.2, 0.4, 0.6, 0.8, 1)) + 
+  theme_bw() +
+  geom_errorbar(aes(ymax = Upper, ymin = Low), width=0.01, color = "#0000aa") +
+  theme(axis.title.x = element_blank(), axis.text.x = element_text(angle=48, vjust=1, hjust=1, size=10), 
+        axis.text.y = element_text(size = 10)) +
+  theme(panel.border = element_blank(), panel.grid.major.x = element_blank(), 
+        panel.grid.minor = element_blank(), panel.grid.major = element_line(colour="#000000", size=0.03))
+
+print(plot)
+```
+
+Notice that Kappa can take negative values, where a negative value implies "disagreement."
+
+**Warning:** Jackknife confidence intervals for individual referents may not be precise, especially when the number of participants is not sufficiently large. 
+
+## Within-Participant Comparisons
+We can also use confidence intervals to back up the authors' claim on the effect of directional referents on agreement: *“highly directional commands [...] tended to have a high gesture agreement”* [@Bailly2013]. The difference in Kappa between the eight directional referents containing the terms *stop*, *bottom*, *left*, *right*, *previous* or *next* and allother referents can be estimated as follows: 
+
+```{r warning=FALSE, results='hold'}
+directional <- c("top", "bottom", "left", "right", "previous", "next", "Previous", "Next")
+referents.all <- data[,1]
+matched.rows <- grep(paste(directional,collapse="|"), referents.all)
+
+directional <- gestures[matched.rows,] # gesture proposals for directional referents
+other <- gestures[-matched.rows,] # other proposals
+
+# This assumes that chance agreement is the same for the two referent groups 
+# For this, we use a pooled pe -- calculated for the full dataset 
+fleiss.pe <- fleiss.chance.agreement.raw.noinference(gestures)
+fleiss.pooled <- function(ratings) {generic.kappa(ratings, fleiss.pe)}
+
+diff.Kappa <- jack.CI.diff.random.raters(directional, other, fleiss.pooled)
+printCI("Difference in Fleiss' Kappa (pooled pe)", diff.Kappa)
+```
+
+The difference in Fleiss’ Kappa between the two groups of references is $\Delta \kappa =.41$, $95\%$ CI $= [.24, .58]$, so there is strong evidence to support the authors' claim.
+
+## Comparisons between Independent Groups
+@Bailly2013 collected proposals from 11 women and 9 men. @Vatavu:2016 reanalyzed their dataset to test differences in agreement between genders but observed similar overall agreement rates between women and men (.353 vs. .322). We can use Fleiss’ Kappa to estimate this difference and construct its 95% confidence interval with the percentile bootstrap method (this can take several minutes):
+
+```{r warning=FALSE, results='hold'}
+# This mask identifies the ID of male participants
+men_mask <- c(1, 5, 6, 8, 9, 13, 15, 18, 20)
+gestures_men <- gestures[men_mask]
+gestures_women <- gestures[-men_mask]
+
+kappa.men <- jack.CI.random.raters(gestures_men, fleiss.kappa)
+printCI("Fleiss' Kappa for Men", kappa.men)
+
+kappa.women <- jack.CI.random.raters(gestures_women, fleiss.kappa)
+printCI("Fleiss' Kappa for Women", kappa.women)
+
+# The first argument specifies the referents of interest 
+# Here, we want to compare agreement over all the referents
+kappa.delta <- fleiss.kappa.bootstrap.diff.ci(1:nrow(gestures), 
+                                              gestures_women, gestures_men, 
+                                              R = 3000) # Num of bootstrap samples
+printCI("Difference in Fleiss' Kappa between Women and Men", kappa.delta)
+```
+
+Clearly, there is no evidence to support that there is a difference in agreement between women and men. 
+
+However, @Vatavu:2016 continued their analysis and used the *Vb* statistic to compare agreement differences between genders for individual referents. They found *”significant differences (p < .05) for 7 referents.”* Based on this finding, they concluded: *”these results show that women and men reach consensus over gestures in different ways that depend on the nature of the referent [...]”*. The TOCHI article shows that such differences are random, due to the high Type I error rate of the *Vb* statistic. 
+
+Can we then use the bootstrap method to test gender differences for individual referents? We discourage such practices for several reasons. Making comparisons between women and men was out of the scope of the original study of @Bailly2013. The size of the two groups was particularly low, while the study did not control for confounding variables that might correlate with gender. We argue against making unplanned post-hoc comparisons over uncontrolled samples of such small sizes, as those can result in misleading conclusions. Furthermore, jackknife and bootstrap confidence intervals for individual referents may not be precise, especially when sample sizes are low. Therefore, using them to test such hypotheses may not be appropriate.
+
+## Other Remarks
+The same agreement indices are used for the analysis of inter-rater reliability studies, such as to assess how independent raters agree on their classification of design outcomes, e.g., see @Bousseau:2016. However, the underlying assumptions for statistical inference may not be the same. In gesture elicitation studies, referents are fixed: any conclusion typically only applies to these referents. Participants, in contrast, are chosen randomly, and investigators may need to generalize their conclusions to the entire population of potential users. 
+
+Therefore, the above methods of inference will not apply if items classified by raters are not fixed but are rather sampled from a larger population. @gwet2014 discusses solutions for a range of scenarios. His [AgreeStat software](http://agreestat.com/agreestat.html) deals with many of them.
+
+Consider that chance-corrected coefficients have received a lot of criticism by many authors (including @gwet2014 who has introduced his own measure). Despite such criticisms, Fleiss' Kappa and Krippendorf's alpha are still widely used for very good reasons. For a strong argumentation in favor of these measures, I refer the readers to @krippendorff2016.
+
+
+## Acknowledgments
+Pierre Dragicevic has contributed insights and code for the above analyses. I am grateful to Gilles Bailly and his co-authors for giving access to their anonymized dataset.
+
+## References
